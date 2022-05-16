@@ -21,6 +21,7 @@ const useEwitter = () => {
   // const Ewitter = getEwitterContract();
 
   const [currentAccount, setCurrentAccount] = useState<string>('');
+  const [currentUser, setCurrentUser] = useState<string>('');
 
   const connect = async () => {
     try {
@@ -50,6 +51,20 @@ const useEwitter = () => {
     }
     connect();
   }, []);
+
+  useEffect(() =>{
+    if(currentAccount){
+      getUser();
+    }
+  }, [currentAccount])
+
+const getUser = async ()=>{
+  const contract = getEwitterContract();
+  const user = await contract.getUser(currentAccount);
+  const {avatar, bio, name, username, wallet} = user;
+  console.log(user);
+  return user;
+}
 
   return { connect, account: currentAccount };
 };
